@@ -27,7 +27,7 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev**
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform init
           pwd
 
@@ -36,7 +36,7 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev**
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform plan
 
 
@@ -47,7 +47,7 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev**
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform apply --auto-approve
 
       - name: Terraform Destroy
@@ -57,6 +57,6 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev**
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform destroy --auto-approve
     
