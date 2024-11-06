@@ -7,7 +7,7 @@ on:
       - 'main'
       - '*'
     paths:
-      - 'dev/**'
+      - 'dev/Org_Templates/terraform-google-cloud-apis'
 
 concurrency: ${{ github.repository }}
 
