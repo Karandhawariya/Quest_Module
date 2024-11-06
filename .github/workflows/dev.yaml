@@ -1,1 +1,63 @@
-name : 'dev'
+
+name: 'Github_Actions'
+
+on:
+  push:
+    branches:
+      - 'main'
+      - '*'
+    paths:
+      - 'dev/**'
+
+concurrency: ${{ github.repository }}
+
+jobs:
+  dev_cicd:
+    name: 'CICD Job dev'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+
+      - name: GIT Checkout
+        id: 'git-checkout'
+        uses: "actions/checkout@v4"
+
+      - name: Terraform Init
+        id: 'tf-init'
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        run: |
+          cd ./dev
+          terraform init
+          pwd
+
+      - name: Terraform Plan
+        id: 'tf-plan'
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        run: |
+          cd ./dev
+          terraform plan
+
+
+      - name: Terraform Apply
+        id: 'tf-apply'
+        if: |
+          github.ref == 'refs/heads/main'
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        run: |
+          cd ./dev
+          terraform apply --auto-approve
+
+      - name: Terraform Destroy
+        id: 'tf-destroy'
+        #if: github.event.inputs.destroy == 'true'  # Conditional execution
+        if: |
+          github.ref == 'refs/heads/destroy' 
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        run: |
+          cd ./dev
+          terraform destroy --auto-approve
+    
