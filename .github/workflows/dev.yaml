@@ -21,22 +21,27 @@ jobs:
       - name: GIT Checkout
         id: 'git-checkout'
         uses: "actions/checkout@v4"
+      - id: auth
+        uses: google-github-actions/auth@v2.0.0  
+        with:
+           workload_identity_provider: 'projects/82620805336/locations/global/workloadIdentityPools/quest-wif/providers/github'
+           service_account: 'dynatrace-gcp-monitor-sa@kd-project-437712.iam.gserviceaccount.com'
 
       - name: Terraform Init
         id: 'tf-init'
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        #env:
+          #GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform init
           pwd
 
       - name: Terraform Plan
         id: 'tf-plan'
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        #env:
+          #GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform plan
 
 
@@ -44,18 +49,18 @@ jobs:
         id: 'tf-apply'
         if: |
           github.ref == 'refs/heads/main'
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        #env:
+          #GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
-          cd ./dev
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
           terraform apply --auto-approve
 
       - name: Terraform Destroy
         id: 'tf-destroy'
         if: |
           github.ref == 'refs/heads/main'
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        #env:
+          #GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
         run: |
           cd ./dev
           terraform destroy --auto-approve
