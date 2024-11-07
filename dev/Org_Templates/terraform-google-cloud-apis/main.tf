@@ -1,5 +1,5 @@
 module "apis" { 
-      for_each = {
+      for_each = {  
     for k,v  in try(var.apis,{}): k => v if v.delete != true    
   }
     source = "../../Org_Module/terraform-google-cloud-apis"     
