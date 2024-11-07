@@ -29,8 +29,10 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@v0.4.0  
         with:
-           workload_identity_provider: 'projects/82620805336/locations/global/workloadIdentityPools/quest-wif/providers/github'
-           service_account: 'dynatrace-gcp-monitor-sa@kd-project-437712.iam.gserviceaccount.com'
+           #workload_identity_provider: 'projects/82620805336/locations/global/workloadIdentityPools/quest-wif/providers/github'
+           #service_account: 'dynatrace-gcp-monitor-sa@kd-project-437712.iam.gserviceaccount.com'
+           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
 
       - name: Terraform Init
         id: 'tf-init'
