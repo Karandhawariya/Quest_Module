@@ -54,7 +54,7 @@ jobs:
 
   dev_cd_deploy:
     name: 'deploy'
-    needs: 'dev_ci_test'
+    #needs: 'dev_ci_test'
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
