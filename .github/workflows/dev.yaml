@@ -12,8 +12,8 @@ on:
 concurrency: ${{ github.repository }}
 
 jobs:
-  dev_cicd:
-    name: 'CICD Job dev'
+  dev_ci_test:
+    name: 'test'
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
@@ -52,6 +52,45 @@ jobs:
           terraform plan
 
 
+  dev_cd_deploy:
+    name: 'deploy'
+    needs: 'dev_ci_test'
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: read
+      id-token: 'write'
+
+    steps:
+
+      - name: GIT Checkout
+        id: 'git-checkout'
+        uses: "actions/checkout@v4"
+        
+      - id: auth
+        uses: google-github-actions/auth@v0.4.0  
+        with:
+           #workload_identity_provider: 'projects/82620805336/locations/global/workloadIdentityPools/quest-wif/providers/github'
+           #service_account: 'dynatrace-gcp-monitor-sa@kd-project-437712.iam.gserviceaccount.com'
+           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+
+      - name: Terraform Init
+        id: 'tf-init'
+        #env:
+          #GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        run: |
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
+          terraform init
+          pwd
+
+      - name: Terraform Plan
+        id: 'tf-plan'
+        #env:
+          #GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+        run: |
+          cd ./dev/Org_Templates/terraform-google-cloud-apis
+          terraform plan
+          
       - name: Terraform Apply
         id: 'tf-apply'
         if: |
