@@ -8,6 +8,8 @@ on:
       - '*'
     paths:
       - 'dev/**'
+  pull_request:
+    
 
 concurrency: ${{ github.repository }}
 
