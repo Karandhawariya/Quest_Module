@@ -1,4 +1,4 @@
-module "apis" {
+module "apis" { 
       for_each = {
     for k,v  in try(var.apis,{}): k => v if v.delete != true    
   }
