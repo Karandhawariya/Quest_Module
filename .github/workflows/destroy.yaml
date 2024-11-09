@@ -1,0 +1,30 @@
+name: 'Terraform Destroy'
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_dir:
+        description: 'Specify the subdirectory to destroy resources from (e.g., compute, bucket, gke, database)'
+        required: true
+        default: ''
+
+jobs:
+  tf-destroy:
+    runs-on: ubuntu-latest
+    env: 
+      GOOGLE_CREDENTIALS: ${{ secrets.SA_KEY }}
+
+    steps:
+      - name: GIT Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform Init
+        run: |
+          cd ./dev/${{ github.event.inputs.target_dir }}
+          terraform init
+
+      - name: Terraform Destroy
+        id: destroy
+        run: |
+          cd ./dev/${{ github.event.inputs.target_dir }}
+          terraform destroy --auto-approve
