@@ -6,6 +6,6 @@ variable "apis" {
   sensitive = false
 }
 
-variable "access_token" {
+/*variable "access_token" {
     sensitive   = true
-}
+}*/
